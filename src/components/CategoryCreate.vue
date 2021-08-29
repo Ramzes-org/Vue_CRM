@@ -10,7 +10,7 @@
           <input
             id="name"
             type="text"
-            v-model="title"
+            v-model.trim="title"
             :class="{invalid: $v.title.$dirty && !$v.title.required}"
           />
           <label for="name">Название</label>
@@ -26,7 +26,7 @@
           <input
             id="limit"
             type="number"
-            v-model="limit"
+            v-model.number="limit"
             :class="{invalid: $v.limit.$dirty && !$v.limit.minValue}"
           />
           <label for="limit">Лимит</label>
@@ -64,11 +64,25 @@ export default {
     M.updateTextFields();
   },
   methods: {
-    submitHandler() {
+    async submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         // eslint-disable-next-line no-useless-return
         return;
+      }
+
+      try {
+        const category = await this.$store.dispatch('createCategory', {
+          title: this.title,
+          limit: this.limit,
+        });
+        this.title = '';
+        this.limit = 100;
+        this.$v.$reset();
+        this.$message('Категория была создана');
+        this.$emit('created', category);
+      } catch (e) {
+        console.log(e);
       }
     },
   },
