@@ -28,7 +28,7 @@
           />
           <label for="name">Название</label>
           <span
-          v-if="$v.title.$dirty && !$v.title.required"
+            v-if="$v.title.$dirty && !$v.title.required"
             class="helper-text invalid"
           >
             Введите название категории
@@ -44,7 +44,7 @@
           />
           <label for="limit">Лимит</label>
           <span
-            v-if="$v.limit.$dirty && !$v.limit.minValue"
+            v-if="$v.limit.$dirty && (!$v.limit.minValue || $v.title.required)"
             class="helper-text invalid"
           >
             Минимальная значение {{$v.limit.$params.minValue.min}}
@@ -78,7 +78,7 @@ export default {
   }),
   validations: {
     title: { required },
-    limit: { minValue: minValue(100) },
+    limit: { required, minValue: minValue(100) },
   },
   watch: {
     current(catId) {
@@ -96,7 +96,7 @@ export default {
   methods: {
     async submitHandler() {
       if (this.$v.$invalid) {
-        this.$v.touch();
+        this.$v.$touch();
         // eslint-disable-next-line no-useless-return
         return;
       }

@@ -31,7 +31,7 @@
           />
           <label for="limit">Лимит</label>
           <span
-            v-if="$v.limit.$dirty && !$v.limit.minValue"
+            v-if="$v.limit.$dirty && (!$v.limit.minValue || $v.title.required)"
             class="helper-text invalid"
           >
             Минимальная значение {{$v.limit.$params.minValue.min}}
@@ -57,7 +57,7 @@ export default {
   }),
   validations: {
     title: { required },
-    limit: { minValue: minValue(100) },
+    limit: { required, minValue: minValue(100) },
   },
   mounted() {
     // eslint-disable-next-line no-undef
