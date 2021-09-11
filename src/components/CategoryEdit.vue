@@ -100,7 +100,6 @@ export default {
         // eslint-disable-next-line no-useless-return
         return;
       }
-
       try {
         const categoryData = {
           id: this.current,
